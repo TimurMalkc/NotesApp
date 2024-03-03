@@ -21,7 +21,7 @@ def open_notes(noteName):
     newWindow = tk.Toplevel(window)
     newWindow.title(noteName)
     newWindow.state("zoomed")
-    file_path = f"{path}\\{noteName}"
+    file_path = f"{path}\\{noteName}.txt"
 
     def saveNote():
         newText = notesText.get("1.0", "end-1c")
@@ -35,18 +35,19 @@ def open_notes(noteName):
                     command= saveNote,
                     font=("Comic Sans", 10),
                     fg="#EEF5FF", bg="#B4D4FF",
-                    activeforeground="#EEF5FF", activebackground="#B4D4FF",padx=4).pack()
+                    activeforeground="#EEF5FF", activebackground="#B4D4FF",padx=4)
+    saveButton.pack()
 
     with open(file_path, "r") as f:
         notesText.insert(tk.END, f.read())
 
 
-
-
 def addNote():
-    if(nameEntry.get() != ""):
-        notesList.insert(tk.END, nameEntry.get())
+    fileName = nameEntry.get()+".txt"
+    if(fileName != "" and fileName not in os.listdir()):
+        notesList.insert(tk.END, fileName)
         notesList.itemconfig(tk.END, {'bg': '#285d69'})
+        open(fileName, "x")
 
 def onselect(evt):
     w = evt.widget
@@ -56,16 +57,22 @@ def onselect(evt):
         print('You selected item %d: "%s"' % (index, value))
         open_notes(value)
 
-noteButton = tk.Button(frameOther, text="New Note", background="blue", width=10, height=5,
+addButton = tk.Button(frameOther, text="New Note", background="blue", width=10, height=5,
                     command= addNote,
                     font=("Comic Sans", 10),
                     fg="#EEF5FF", bg="#B4D4FF",
-                    activeforeground="#EEF5FF", activebackground="#B4D4FF",padx=4)
-noteButton.grid(row=0, column=0, sticky = tk.W)
+                    activeforeground="#EEF5FF", activebackground="#B4D4FF")
+addButton.grid(row=0, column=0, sticky = tk.W, padx=4, pady=2)
 
+deleteButton = tk.Button(frameOther, text="Delete Note", background="blue", width=10, height=5,
+                    command= addNote,
+                    font=("Comic Sans", 10),
+                    fg="#EEF5FF", bg="#B4D4FF",
+                    activeforeground="#EEF5FF", activebackground="#B4D4FF")
+deleteButton.grid(row=0, column=1, sticky = tk.W, padx=4, pady=2)
 
 nameEntry = tk.Entry(frameOther, font=("Ariel",35))
-nameEntry.grid(row=0, column=1, sticky = tk.W)
+nameEntry.grid(row=0, column=2, sticky = tk.W, padx=4, pady=2)
 
 
 scroller = tk.Scrollbar(frameList, width=60, background="red", activebackground="red", bg="red")
@@ -80,7 +87,8 @@ scroller.config( command = notesList.yview )
 for file in os.listdir():
     if file.endswith(".txt"):
         file_path = f"{path}\\{file}"
-        notesList.insert(tk.END, file)
+        notesList.insert(tk.END, file.rstrip(".txt"))
+        notesList.itemconfig(tk.END, {'bg': '#285d69'})
         with open(file_path, "r") as f:
             print(f.read())
         print(file)
