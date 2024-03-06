@@ -2,19 +2,23 @@ import tkinter as tk
 import ctypes
 import os
 
+buttonBG = "#FF9F1C"
+itemBG = "#2EC4B6"
+listBG = "#CBF3F0"
+frameBG = "#FFBF69"
+notesBG = "#FFBF69"
+listFG = "#FFFFFF"
+buttonFG = "#FFFFFF"
+comFont = "Gautami"
+
+
 window = tk.Tk()
 window.title("Planner")
 window.state("zoomed")
 frameList = tk.Frame(window, background="red")
 frameList.pack(side=tk.BOTTOM, fill = tk.BOTH, expand=True)
-frameOther = tk.Frame(window, background="blue")
+frameOther = tk.Frame(window, background=frameBG)
 frameOther.pack(side=tk.TOP, fill=tk.X, expand=False)
-
-buttonBG = "#B4D4FF"
-buttonFG = "#EEF5FF"
-itemBG = "#285d69"
-listBG = "#55adad"
-listFG = "white"
 
 path = "C:\\Users\\timur\\PycharmProjects\\NotesAppStorage"
 os.chdir(path)
@@ -30,16 +34,17 @@ def open_notes(name):
     newWindow = tk.Toplevel(window)
     newWindow.title(name)
     newWindow.state("zoomed")
+    newWindow.configure(bg = listBG)
     file_path = f"{path}\\{name}.txt"
 
-    notesText = tk.Text(newWindow, background="red",height=20, width=40)
+    notesText = tk.Text(newWindow, background=notesBG, font=(comFont, 15), height=40, width=120)
     notesText.pack()
     saveButton = tk.Button(newWindow, command=lambda: saveNote(notesText, name),
-                           text="Save", background="blue", width=10, height=5,
-                           font=("Comic Sans", 10),
-                           fg="#EEF5FF", bg="#B4D4FF",
-                           activeforeground="#EEF5FF", activebackground="#B4D4FF", padx=4,)
-    saveButton.pack()
+                           text="Save", width=10, height=5,
+                           font=(comFont, 10),
+                           fg=buttonFG, bg=buttonBG,
+                           activeforeground=buttonFG, activebackground=buttonBG)
+    saveButton.pack(pady=10)
 
     with open(file_path, "r") as f:
         notesText.insert(tk.END, f.read())
@@ -48,7 +53,7 @@ def addNote(listbox, entry):
     fileName = entry.get()
     if(fileName != "" and fileName+".txt" not in os.listdir()):
         listbox.insert(tk.END, fileName)
-        listbox.itemconfig(tk.END, {'bg': '#285d69'})
+        listbox.itemconfig(tk.END, {'bg': itemBG})
         open(fileName+".txt", "x")
 
 def deleteNote(listbox):
@@ -65,13 +70,13 @@ def onselect(listbox):
         value = w.get(index)
         open_notes(value)
 
-nameEntry = tk.Entry(frameOther, font=("Ariel",35))
+nameEntry = tk.Entry(frameOther, font=(comFont,35))
 nameEntry.grid(row=0, column=2, sticky = tk.W, padx=4, pady=2)
 
 scroller = tk.Scrollbar(frameList, width=60)
 scroller.pack(side=tk.RIGHT,fill=tk.Y )
 
-notesList = tk.Listbox(frameList, yscrollcommand = scroller.set,  font=("Comic Sans", 20), bg=listBG, fg=listFG)
+notesList = tk.Listbox(frameList, yscrollcommand = scroller.set,  font=(comFont, 20), bg=listBG, fg=listFG)
 notesList.pack(side=tk.TOP, fill = tk.BOTH, expand=True )
 notesList.bind("<Double-Button>", onselect)
 notesList.bind("<Delete>", lambda x : deleteNote(notesList))
@@ -79,16 +84,16 @@ window.bind("<Return>", lambda x : addNote(notesList, nameEntry))
 
 scroller.config(command = notesList.yview )
 
-addButton = tk.Button(frameOther, text="New Note", width=10, height=5,
+addButton = tk.Button(frameOther, text="New+", width=10, height=5,
                     command= lambda : addNote(notesList, nameEntry),
-                    font=("Comic Sans", 10),
+                    font=(comFont, 12),
                     fg=buttonFG, bg=buttonBG,
                     activeforeground=buttonFG, activebackground=buttonBG)
 addButton.grid(row=0, column=0, sticky = tk.W, padx=4, pady=2)
 
-deleteButton = tk.Button(frameOther, text="Delete Note", width=10, height=5,
+deleteButton = tk.Button(frameOther, text="Delete", width=10, height=5,
                     command= lambda : deleteNote(notesList),
-                    font=("Comic Sans", 10),
+                    font=(comFont, 12),
                     fg=buttonFG, bg=buttonBG,
                     activeforeground=buttonFG, activebackground=buttonBG)
 deleteButton.grid(row=0, column=1, sticky = tk.W, padx=4, pady=2)
