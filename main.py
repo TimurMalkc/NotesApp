@@ -11,7 +11,6 @@ listFG = "#FFFFFF"
 buttonFG = "#FFFFFF"
 comFont = "Gautami"
 
-
 window = tk.Tk()
 window.title("Planner")
 window.state("zoomed")
@@ -103,9 +102,6 @@ for file in os.listdir():
         file_path = f"{path}\\{file}"
         notesList.insert(tk.END, file.rstrip(".txt"))
         notesList.itemconfig(tk.END, {"bg": itemBG})
-#        with open(file_path, "r") as f:
-#            print(f.read())
-#       print(file)
 
 ctypes.windll.shcore.SetProcessDpiAwareness(True)
 
