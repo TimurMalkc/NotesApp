@@ -1,4 +1,4 @@
-# NotesApp
+# Notes App
 A notes app using Python Tkinter and text files.
 
 **Tech Used:** Python 3.10.11, Python Tkinter Framework
