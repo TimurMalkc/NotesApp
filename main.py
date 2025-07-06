@@ -19,7 +19,7 @@ frameList.pack(side=tk.BOTTOM, fill = tk.BOTH, expand=True)
 frameOther = tk.Frame(window, background=frameBG)
 frameOther.pack(side=tk.TOP, fill=tk.X, expand=False)
 
-path = "C:\\Users\\timur\\PycharmProjects\\NotesAppStorage"
+path = "C:\\NotesAppStorage"
 os.chdir(path)
 
 def saveNote(text, name):
